@@ -1,0 +1,143 @@
+<!-- /dexter-ai/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dexter AI</title>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .container {
+      padding: 16px;
+      max-width: 900px;
+      margin: auto;
+    }
+    textarea, input {
+      width: 100%;
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    button {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      background: #38bdf8;
+      font-weight: bold;
+    }
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid #334155;
+    }
+  </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+function fakeAI(prompt) {
+  return Promise.resolve(
+    "AI Output (replace with real API):\\n" +
+    prompt.split(" ").slice(0, 40).join(" ")
+  )
+}
+
+function App() {
+  const [content, setContent] = React.useState("")
+  const [summary, setSummary] = React.useState("")
+  const [flashcards, setFlashcards] = React.useState([])
+  const [chat, setChat] = React.useState([])
+  const [question, setQuestion] = React.useState("")
+
+  async function generateSummary() {
+    const res = await fakeAI("Summarize: " + content)
+    setSummary(res)
+    localStorage.setItem("dexter_summary", res)
+  }
+
+  async function generateFlashcards() {
+    const cards = summary
+      .split(".")
+      .filter(Boolean)
+      .map(s => ({ q: s.trim(), a: "Explain this" }))
+    setFlashcards(cards)
+    localStorage.setItem("dexter_cards", JSON.stringify(cards))
+  }
+
+  async function askTutor() {
+    const answer = await fakeAI(question + " Context: " + summary)
+    setChat([...chat, { q: question, a: answer }])
+    setQuestion("")
+  }
+
+  return (
+    <div className="container">
+      <h1>🧠 Dexter AI</h1>
+      <p>Your personal AI learning system</p>
+
+      <div className="card">
+        <h3>Study Content</h3>
+        <textarea rows="6"
+          placeholder="Paste notes, transcript, PDF text..."
+          value={content}
+          onChange={e => setContent(e.target.value)}
+        />
+        <button onClick={generateSummary}>Generate Summary</button>
+      </div>
+
+      {summary && (
+        <div className="card">
+          <h3>Summary</h3>
+          <p>{summary}</p>
+          <button onClick={generateFlashcards}>Create Flashcards</button>
+        </div>
+      )}
+
+      {flashcards.length > 0 && (
+        <div className="card">
+          <h3>Flashcards</h3>
+          {flashcards.map((c, i) => (
+            <p key={i}>Q: {c.q}</p>
+          ))}
+        </div>
+      )}
+
+      <div className="card">
+        <h3>AI Tutor</h3>
+        <input
+          placeholder="Ask Dexter..."
+          value={question}
+          onChange={e => setQuestion(e.target.value)}
+        />
+        <button onClick={askTutor}>Ask</button>
+
+        {chat.map((m, i) => (
+          <p key={i}><b>You:</b> {m.q}<br/><b>Dexter:</b> {m.a}</p>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />)
+</script>
+</body>
+</html>
