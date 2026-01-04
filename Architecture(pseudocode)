@@ -1,0 +1,7 @@
+App
+ ├─ InputContent
+ ├─ GenerateSummary(content)
+ ├─ GenerateFlashcards(summary)
+ ├─ QuizEngine(flashcards)
+ ├─ TutorChat(content)
+ ├─ Persist everything in localStorage
