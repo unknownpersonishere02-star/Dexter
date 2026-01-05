@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dexter AI</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,48 +12,56 @@
       color: white;
       padding: 15px;
     }
+
     textarea, button {
       width: 100%;
       margin-top: 10px;
       padding: 10px;
       border-radius: 8px;
       border: none;
+      font-size: 16px;
     }
+
     button {
       background: #22c55e;
       font-weight: bold;
+      cursor: pointer;
     }
+
     .box {
       background: #1e293b;
       padding: 10px;
       border-radius: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
   </style>
 </head>
+
 <body>
 
-<h2>🧠 Dexter AI</h2>
+  <h2>🧠 Dexter AI</h2>
+  <p>Paste your notes and learn faster</p>
 
-<textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
+  <textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
 
-<button onclick="generate()">Generate Learning</button>
+  <button onclick="generate()">Generate Learning</button>
 
-<div class="box">
-  <h3>📌 Summary</h3>
-  <p id="summary"></p>
-</div>
+  <div class="box">
+    <h3>📌 Summary</h3>
+    <p id="summary"></p>
+  </div>
 
-<div class="box">
-  <h3>🧠 Flashcards</h3>
-  <div id="flashcards"></div>
-</div>
+  <div class="box">
+    <h3>🃏 Flashcards</h3>
+    <div id="flashcards"></div>
+  </div>
 
-<div class="box">
-  <h3>❓ Quiz</h3>
-  <div id="quiz"></div>
-</div>
+  <div class="box">
+    <h3>❓ Quiz</h3>
+    <div id="quiz"></div>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
