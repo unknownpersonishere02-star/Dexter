@@ -4,115 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dexter AI</title>
-
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-
   <style>
     body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #020617;
-      color: #e5e7eb;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 15px;
     }
-    .app {
-      padding: 16px;
-      max-width: 900px;
-      margin: auto;
-    }
-    textarea, input {
+    textarea, button {
       width: 100%;
-      background: #020617;
-      color: #e5e7eb;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 8px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
     }
     button {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      border: none;
-      background: #38bdf8;
+      background: #22c55e;
       font-weight: bold;
-      width: 100%;
     }
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      padding: 16px;
-      margin-top: 16px;
-      border: 1px solid #334155;
+    .box {
+      background: #1e293b;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
     }
   </style>
 </head>
-
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-function fakeAI(prompt) {
-  return "Dexter AI response: " + prompt.slice(0, 80)
-}
+<h2>🧠 Dexter AI</h2>
 
-function App() {
-  const [content, setContent] = React.useState("")
-  const [summary, setSummary] = React.useState("")
-  const [chat, setChat] = React.useState([])
-  const [question, setQuestion] = React.useState("")
+<textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
 
-  function summarize() {
-    setSummary(fakeAI(content))
-  }
+<button onclick="generate()">Generate Learning</button>
 
-  function askDexter() {
-    setChat([...chat, { q: question, a: fakeAI(question + summary) }])
-    setQuestion("")
-  }
+<div class="box">
+  <h3>📌 Summary</h3>
+  <p id="summary"></p>
+</div>
 
-  return (
-    <div className="app">
-      <h1>🧠 Dexter AI</h1>
-      <p>Learn faster. Smarter.</p>
+<div class="box">
+  <h3>🧠 Flashcards</h3>
+  <ul id="flashcards"></ul>
+</div>
 
-      <div className="card">
-        <h3>Study Input</h3>
-        <textarea
-          rows="6"
-          placeholder="Paste notes, PDF text, or lecture transcript"
-          value={content}
-          onChange={e => setContent(e.target.value)}
-        />
-        <button onClick={summarize}>Generate Summary</button>
-      </div>
+<div class="box">
+  <h3>❓ Quiz</h3>
+  <div id="quiz"></div>
+</div>
 
-      {summary && (
-        <div className="card">
-          <h3>Summary</h3>
-          <p>{summary}</p>
-        </div>
-      )}
-
-      <div className="card">
-        <h3>Ask Dexter</h3>
-        <input
-          placeholder="Ask a question..."
-          value={question}
-          onChange={e => setQuestion(e.target.value)}
-        />
-        <button onClick={askDexter}>Ask</button>
-
-        {chat.map((m, i) => (
-          <p key={i}><b>You:</b> {m.q}<br/><b>Dexter:</b> {m.a}</p>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />)
-</script>
+<script src="script.js"></script>
 </body>
 </html>
