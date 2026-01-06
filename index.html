@@ -10,29 +10,51 @@
       font-family: Arial, sans-serif;
       background: #0f172a;
       color: white;
-      padding: 15px;
+      padding: 16px;
     }
 
-    textarea, button {
+    h2 {
+      text-align: center;
+    }
+
+    textarea {
       width: 100%;
-      margin-top: 10px;
+      min-height: 120px;
       padding: 10px;
       border-radius: 8px;
       border: none;
-      font-size: 16px;
+      margin-top: 10px;
     }
 
     button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
       background: #22c55e;
       font-weight: bold;
       cursor: pointer;
     }
 
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tabs button {
+      flex: 1;
+      background: #334155;
+      color: white;
+    }
+
     .box {
       background: #1e293b;
-      padding: 10px;
+      padding: 12px;
       border-radius: 8px;
       margin-top: 12px;
+      display: none;
     }
   </style>
 </head>
@@ -40,28 +62,22 @@
 <body>
 
   <h2>🧠 Dexter AI</h2>
-  <p>Paste your notes and learn faster</p>
+  <p>Paste your notes and generate learning content</p>
 
-  <textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
+  <textarea id="notes" placeholder="Paste notes here..."></textarea>
 
-  <button onclick="generate()">Generate Learning</button>
+  <button onclick="generateAI()">Generate with AI</button>
 
-  <div class="box">
-    <h3>📌 Summary</h3>
-    <p id="summary"></p>
+  <div class="tabs">
+    <button onclick="showTab('summary')">📄 Summary</button>
+    <button onclick="showTab('keypoints')">🔑 Key Points</button>
+    <button onclick="showTab('quiz')">❓ Quiz</button>
   </div>
 
-  <div class="box">
-    <h3>🃏 Flashcards</h3>
-    <div id="flashcards"></div>
-  </div>
-
-  <div class="box">
-    <h3>❓ Quiz</h3>
-    <div id="quiz"></div>
-  </div>
+  <div id="summary" class="box"></div>
+  <div id="keypoints" class="box"></div>
+  <div id="quiz" class="box"></div>
 
   <script src="script.js"></script>
-
 </body>
 </html>
