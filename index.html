@@ -2,81 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dexter AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #0f172a;
+      background: linear-gradient(135deg, #0f172a, #020617);
       color: white;
-      padding: 16px;
+      padding: 20px;
     }
 
-    h2 {
+    h1 {
       text-align: center;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #cbd5f5;
+      margin-bottom: 20px;
     }
 
     textarea {
       width: 100%;
-      min-height: 120px;
-      padding: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
       border: none;
-      margin-top: 10px;
+      resize: vertical;
     }
 
-    button {
+    button.main {
       width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
+      margin-top: 12px;
+      padding: 14px;
+      font-size: 16px;
       border: none;
+      border-radius: 10px;
       background: #22c55e;
+      color: black;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .tabs {
+    .row {
       display: flex;
-      gap: 6px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 15px;
     }
 
-    .tabs button {
+    .row button {
       flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
       background: #334155;
       color: white;
+      font-size: 14px;
+      cursor: pointer;
     }
 
-    .box {
-      background: #1e293b;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 12px;
-      display: none;
+    #output {
+      margin-top: 20px;
+      background: #020617;
+      border-radius: 12px;
+      padding: 15px;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+
+    .error {
+      color: #f87171;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-  <h2>🧠 Dexter AI</h2>
-  <p>Paste your notes and generate learning content</p>
+  <h1>🧠 Dexter AI</h1>
+  <p class="subtitle">Paste your notes and generate learning content</p>
 
-  <textarea id="notes" placeholder="Paste notes here..."></textarea>
+  <textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
 
-  <button onclick="generateAI()">Generate with AI</button>
+  <button class="main" onclick="generateAI()">Generate with AI</button>
 
-  <div class="tabs">
-    <button onclick="showTab('summary')">📄 Summary</button>
-    <button onclick="showTab('keypoints')">🔑 Key Points</button>
-    <button onclick="showTab('quiz')">❓ Quiz</button>
+  <div class="row">
+    <button onclick="showSummary()">📄 Summary</button>
+    <button onclick="showKeyPoints()">🔑 Key Points</button>
+    <button onclick="showQuiz()">❓ Quiz</button>
   </div>
 
-  <div id="summary" class="box"></div>
-  <div id="keypoints" class="box"></div>
-  <div id="quiz" class="box"></div>
+  <div id="output"></div>
 
   <script src="script.js"></script>
 </body>
