@@ -1,44 +1,58 @@
-function generate() {
-  const text = document.getElementById("notes").value;
-  if (!text) {
-    alert("Please paste notes first!");
+const API_KEY = "AIzaSyAa3ClYalKRWCs1DMOIaEOalSKV5ZH5W4c";
+
+function showTab(id) {
+  document.querySelectorAll(".box").forEach(div => div.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+
+async function generateAI() {
+  const notes = document.getElementById("notes").value.trim();
+  if (!notes) {
+    alert("Please paste some notes first");
     return;
   }
 
-  const sentences = text.split(".").filter(s => s.trim());
+  document.getElementById("summary").style.display = "block";
+  document.getElementById("summary").innerText = "⏳ Generating with AI...";
 
-  // Summary
-  document.getElementById("summary").innerText =
-    sentences.slice(0, 2).join(".") + ".";
+  const prompt = `
+You are an AI learning assistant.
+From the following notes, generate:
+1. A short summary
+2. 5 key points
+3. 3 multiple choice questions with answers
 
-  // Flashcards (flip)
-  const flashcards = document.getElementById("flashcards");
-  flashcards.innerHTML = "";
+Notes:
+${notes}
+`;
 
-  sentences.slice(0, 4).forEach((s) => {
-    const card = document.createElement("div");
-    card.style.padding = "10px";
-    card.style.marginTop = "8px";
-    card.style.background = "#334155";
-    card.style.borderRadius = "8px";
-    card.style.cursor = "pointer";
-    card.innerText = "Tap to reveal";
+  try {
+    const res = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }]
+            }
+          ]
+        })
+      }
+    );
 
-    let flipped = false;
-    card.onclick = () => {
-      flipped = !flipped;
-      card.innerText = flipped ? s.trim() : "Tap to reveal";
-    };
+    const data = await res.json();
+    const text = data.candidates[0].content.parts[0].text;
 
-    flashcards.appendChild(card);
-  });
+    // Simple parsing
+    const sections = text.split("\n\n");
 
-  // Quiz
-  document.getElementById("quiz").innerHTML = `
-    <p><b>Quiz:</b> This topic is mainly about?</p>
-    <button onclick="alert('Correct 🎉')">Based on notes</button>
-    <button onclick="alert('Wrong ❌')">Something else</button>
-  `;
+    document.getElementById("summary").innerText = sections[0] || "No summary";
+    document.getElementById("keypoints").innerText = sections[1] || "No key points";
+    document.getElementById("quiz").innerText = sections[2] || "No quiz";
 
-  localStorage.setItem("dexter_notes", text);
+  } catch (err) {
+    document.getElementById("summary").innerText = "❌ Error: " + err.message;
+  }
 }
