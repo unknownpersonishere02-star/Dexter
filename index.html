@@ -3,20 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Dexter AI</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #0b1220;
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
       color: white;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    .box {
+
+    .container {
       width: 90%;
       max-width: 500px;
     }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
     textarea {
       width: 100%;
       height: 120px;
@@ -24,44 +34,49 @@
       font-size: 16px;
       border-radius: 6px;
       border: none;
+      outline: none;
     }
+
     button {
       width: 100%;
       margin-top: 10px;
       padding: 12px;
       font-size: 18px;
-      background: #38bdf8;
       border: none;
       border-radius: 6px;
+      background: #38bdf8;
       cursor: pointer;
     }
-    #result {
+
+    #output {
       margin-top: 15px;
-      background: #020617;
       padding: 10px;
+      background: #020617;
       border-radius: 6px;
       min-height: 80px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
+
 <body>
 
-  <div class="box">
-    <h2>Dexter AI</h2>
+  <div class="container">
+    <h1>Dexter AI</h1>
 
     <textarea id="prompt" placeholder="Ask me anything..."></textarea>
 
     <button onclick="generateAI()">Generate</button>
 
-    <div id="result"></div>
+    <div id="output"></div>
   </div>
 
 <script>
 async function generateAI() {
   const prompt = document.getElementById("prompt").value;
-  const result = document.getElementById("result");
+  const output = document.getElementById("output");
 
-  result.innerText = "Thinking...";
+  output.innerText = "Thinking...";
 
   try {
     const response = await fetch(
@@ -71,20 +86,21 @@ async function generateAI() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt: prompt })
       }
     );
 
     const data = await response.json();
 
-    if (data.error) {
-      result.innerText = data.error;
+    if (data.text) {
+      output.innerText = data.text;
     } else {
-      result.innerText = data.text;
+      output.innerText = "No response from AI";
     }
 
-  } catch (err) {
-    result.innerText = "Error connecting to AI";
+  } catch (error) {
+    output.innerText = "Error connecting to AI";
+    console.error(error);
   }
 }
 </script>
