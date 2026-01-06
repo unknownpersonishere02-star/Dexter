@@ -1,118 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dexter AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(180deg, #050b2c, #071a2f);
       color: white;
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
-    .container {
+
+    .app {
       width: 90%;
       max-width: 500px;
-      background: #0b1320;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
-    h1 {
       text-align: center;
-      margin-bottom: 15px;
-      color: #4cc9f0;
     }
+
+    h1 {
+      color: #4fd1ff;
+    }
+
     textarea {
       width: 100%;
-      height: 120px;
-      border-radius: 8px;
-      border: none;
+      height: 150px;
       padding: 10px;
-      font-size: 16px;
+      border-radius: 10px;
+      border: none;
       outline: none;
-      resize: none;
+      font-size: 16px;
     }
+
     button {
       width: 100%;
       margin-top: 15px;
-      padding: 12px;
+      padding: 15px;
       font-size: 18px;
       border: none;
-      border-radius: 8px;
-      background: #4cc9f0;
+      border-radius: 10px;
+      background: #4fd1ff;
       color: black;
-      font-weight: bold;
       cursor: pointer;
     }
-    button:active {
-      transform: scale(0.98);
-    }
-    .result {
+
+    #output {
       margin-top: 15px;
-      background: #111827;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 15px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 10px;
       min-height: 60px;
-      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="app">
     <h1>Dexter AI</h1>
 
-    <textarea id="prompt" placeholder="Ask anything..."></textarea>
+    <textarea id="prompt" placeholder="Ask something..."></textarea>
 
-    <button onclick="generateText()">Generate</button>
+    <button onclick="generate()">Generate</button>
 
-    <div id="result" class="result"></div>
+    <div id="output"></div>
   </div>
 
   <script>
-    async function generateText() {
+    async function generate() {
       const prompt = document.getElementById("prompt").value;
-      const result = document.getElementById("result");
+      const output = document.getElementById("output");
 
-      if (!prompt.trim()) {
-        result.innerText = "Please enter a question.";
-        return;
-      }
-
-      result.innerText = "Thinking...";
+      output.textContent = "Thinking...";
 
       try {
-        const response = await fetch(
+        const res = await fetch(
           "https://dexter-ai-worker.lunarsoul69.workers.dev",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              prompt: prompt
-            })
+            body: JSON.stringify({ prompt })
           }
         );
 
-        const data = await response.json();
+        const data = await res.json();
 
         if (data.reply) {
-          result.innerText = data.reply;
-        } else if (data.error) {
-          result.innerText = "AI Error: " + data.error;
+          output.textContent = data.reply;
         } else {
-          result.innerText = "No response from AI.";
+          output.textContent = data.error || "No response";
         }
-      } catch (err) {
-        result.innerText = "Error connecting to AI";
+
+      } catch (e) {
+        output.textContent = "Error connecting to AI";
       }
     }
   </script>
