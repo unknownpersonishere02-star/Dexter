@@ -1,18 +1,18 @@
-const apiURL = "https://dexter-ai-worker.lunarsoul69.workers.dev";
+const WORKER_URL = "https://dexter-ai-worker.lunarsoul69.workers.dev";
 
 async function askDexter() {
   const input = document.getElementById("userInput").value;
   const output = document.getElementById("output");
 
   if (!input.trim()) {
-    output.innerText = "Please enter something.";
+    output.innerText = "Please type something.";
     return;
   }
 
   output.innerText = "Dexter AI is thinking...";
 
   try {
-    const response = await fetch(apiURL, {
+    const response = await fetch(WORKER_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -24,12 +24,13 @@ async function askDexter() {
 
     const data = await response.json();
 
-    const text =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No response from AI.";
+    if (data.error) {
+      output.innerText = "AI Error: " + data.error;
+    } else {
+      output.innerText = data.text;
+    }
 
-    output.innerText = text;
   } catch (err) {
-    output.innerText = "Error connecting to Dexter AI.";
+    output.innerText = "Error connecting to AI";
   }
 }
