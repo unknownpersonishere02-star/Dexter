@@ -2,85 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dexter AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #0f172a;
-      color: #e5e7eb;
+      color: white;
       margin: 0;
       padding: 20px;
     }
+
     h1 {
       text-align: center;
       color: #38bdf8;
     }
-    textarea, input, button {
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      resize: none;
+    }
+
+    button {
       width: 100%;
       margin-top: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-    textarea {
-      height: 120px;
-    }
-    button {
+      padding: 12px;
+      font-size: 16px;
       background: #38bdf8;
-      color: #000;
-      font-weight: bold;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
-    .output {
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    #output {
+      margin-top: 20px;
       background: #020617;
       padding: 15px;
-      margin-top: 15px;
-      border-radius: 6px;
+      border-radius: 8px;
+      min-height: 80px;
       white-space: pre-wrap;
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
+    <h1>Dexter AI</h1>
 
-  <h1>Dexter AI</h1>
+    <textarea
+      id="userInput"
+      placeholder="Ask Dexter anything..."
+    ></textarea>
 
-  <textarea id="prompt" placeholder="Ask anything, paste text, or paste YouTube transcript..."></textarea>
+    <button onclick="askDexter()">Ask Dexter</button>
 
-  <button onclick="sendToAI()">Generate</button>
+    <div id="output"></div>
+  </div>
 
-  <div class="output" id="output">AI response will appear here...</div>
-
-  <script>
-    async function sendToAI() {
-      const prompt = document.getElementById("prompt").value;
-      const output = document.getElementById("output");
-
-      if (!prompt) {
-        output.innerText = "Please enter something.";
-        return;
-      }
-
-      output.innerText = "Thinking...";
-
-      try {
-        const res = await fetch("https://dexter-ai-worker.lunarsoul69.workers.dev", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ prompt })
-        });
-
-        const data = await res.json();
-        output.innerText = data.result || "No response";
-      } catch (e) {
-        output.innerText = "Error connecting to AI";
-      }
-    }
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
