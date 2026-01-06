@@ -1,79 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Dexter AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #0f172a;
+      background: #0b1220;
       color: white;
-      margin: 0;
-      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
-    h1 {
-      text-align: center;
-      color: #38bdf8;
+    .box {
+      width: 90%;
+      max-width: 500px;
     }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-    }
-
     textarea {
       width: 100%;
       height: 120px;
       padding: 10px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 6px;
       border: none;
-      resize: none;
     }
-
     button {
       width: 100%;
       margin-top: 10px;
       padding: 12px;
-      font-size: 16px;
+      font-size: 18px;
       background: #38bdf8;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #0ea5e9;
-    }
-
-    #output {
-      margin-top: 20px;
+    #result {
+      margin-top: 15px;
       background: #020617;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 6px;
       min-height: 80px;
-      white-space: pre-wrap;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>Dexter AI</h1>
 
-    <textarea
-      id="userInput"
-      placeholder="Ask Dexter anything..."
-    ></textarea>
+  <div class="box">
+    <h2>Dexter AI</h2>
 
-    <button onclick="askDexter()">Ask Dexter</button>
+    <textarea id="prompt" placeholder="Ask me anything..."></textarea>
 
-    <div id="output"></div>
+    <button onclick="generateAI()">Generate</button>
+
+    <div id="result"></div>
   </div>
 
-  <script src="script.js"></script>
+<script>
+async function generateAI() {
+  const prompt = document.getElementById("prompt").value;
+  const result = document.getElementById("result");
+
+  result.innerText = "Thinking...";
+
+  try {
+    const response = await fetch(
+      "https://dexter-ai-worker.lunarsoul69.workers.dev",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt })
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.error) {
+      result.innerText = data.error;
+    } else {
+      result.innerText = data.text;
+    }
+
+  } catch (err) {
+    result.innerText = "Error connecting to AI";
+  }
+}
+</script>
+
 </body>
 </html>
