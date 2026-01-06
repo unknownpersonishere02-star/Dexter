@@ -2,101 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dexter AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dexter AI</title>
 
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #020617);
-      color: white;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
       padding: 20px;
     }
-
     h1 {
       text-align: center;
-      margin-bottom: 8px;
+      color: #38bdf8;
     }
-
-    p.subtitle {
-      text-align: center;
-      color: #cbd5f5;
-      margin-bottom: 20px;
+    textarea, input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
     }
-
     textarea {
-      width: 100%;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      resize: vertical;
+      height: 120px;
     }
-
-    button.main {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #22c55e;
-      color: black;
+    button {
+      background: #38bdf8;
+      color: #000;
       font-weight: bold;
       cursor: pointer;
     }
-
-    .row {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .row button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      background: #334155;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    #output {
-      margin-top: 20px;
+    .output {
       background: #020617;
-      border-radius: 12px;
       padding: 15px;
-      min-height: 80px;
+      margin-top: 15px;
+      border-radius: 6px;
       white-space: pre-wrap;
-    }
-
-    .error {
-      color: #f87171;
-      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-  <h1>🧠 Dexter AI</h1>
-  <p class="subtitle">Paste your notes and generate learning content</p>
+  <h1>Dexter AI</h1>
 
-  <textarea id="notes" rows="6" placeholder="Paste your notes here..."></textarea>
+  <textarea id="prompt" placeholder="Ask anything, paste text, or paste YouTube transcript..."></textarea>
 
-  <button class="main" onclick="generateAI()">Generate with AI</button>
+  <button onclick="sendToAI()">Generate</button>
 
-  <div class="row">
-    <button onclick="showSummary()">📄 Summary</button>
-    <button onclick="showKeyPoints()">🔑 Key Points</button>
-    <button onclick="showQuiz()">❓ Quiz</button>
-  </div>
+  <div class="output" id="output">AI response will appear here...</div>
 
-  <div id="output"></div>
+  <script>
+    async function sendToAI() {
+      const prompt = document.getElementById("prompt").value;
+      const output = document.getElementById("output");
 
-  <script src="script.js"></script>
+      if (!prompt) {
+        output.innerText = "Please enter something.";
+        return;
+      }
+
+      output.innerText = "Thinking...";
+
+      try {
+        const res = await fetch("https://YOUR-WORKER-NAME.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await res.json();
+        output.innerText = data.result || "No response";
+      } catch (e) {
+        output.innerText = "Error connecting to AI";
+      }
+    }
+  </script>
+
 </body>
 </html>
