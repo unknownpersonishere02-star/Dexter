@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dexter AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #050b2c, #071a2f);
+      background: linear-gradient(180deg, #050b2c, #021018);
       color: white;
       display: flex;
       justify-content: center;
@@ -17,9 +17,9 @@
       height: 100vh;
     }
 
-    .app {
+    .box {
       width: 90%;
-      max-width: 500px;
+      max-width: 420px;
       text-align: center;
     }
 
@@ -29,57 +29,56 @@
 
     textarea {
       width: 100%;
-      height: 150px;
-      padding: 10px;
+      height: 120px;
       border-radius: 10px;
       border: none;
-      outline: none;
+      padding: 12px;
       font-size: 16px;
+      resize: none;
     }
 
     button {
       width: 100%;
-      margin-top: 15px;
-      padding: 15px;
+      margin-top: 12px;
+      padding: 14px;
       font-size: 18px;
       border: none;
       border-radius: 10px;
       background: #4fd1ff;
-      color: black;
       cursor: pointer;
     }
 
-    #output {
+    #result {
       margin-top: 15px;
-      padding: 15px;
+      padding: 12px;
       background: rgba(0,0,0,0.4);
       border-radius: 10px;
-      min-height: 60px;
+      min-height: 40px;
     }
   </style>
 </head>
 <body>
 
-  <div class="app">
+  <div class="box">
     <h1>Dexter AI</h1>
 
-    <textarea id="prompt" placeholder="Ask something..."></textarea>
+    <textarea id="prompt" placeholder="Ask anything..."></textarea>
 
     <button onclick="generate()">Generate</button>
 
-    <div id="output"></div>
+    <div id="result"></div>
   </div>
 
   <script>
     async function generate() {
       const prompt = document.getElementById("prompt").value;
-      const output = document.getElementById("output");
+      const result = document.getElementById("result");
 
-      output.textContent = "Thinking...";
+      result.textContent = "Thinking...";
 
       try {
         const res = await fetch(
-          "https://dexter-ai-worker.lunarsoul69.workers.dev",
+          "https://dexter-ai-worker.lunarsoul69.workers.dev/",
           {
             method: "POST",
             headers: {
@@ -92,13 +91,13 @@
         const data = await res.json();
 
         if (data.reply) {
-          output.textContent = data.reply;
+          result.textContent = data.reply;
         } else {
-          output.textContent = data.error || "No response";
+          result.textContent = "No AI response";
         }
 
       } catch (e) {
-        output.textContent = "Error connecting to AI";
+        result.textContent = "Error connecting to AI";
       }
     }
   </script>
